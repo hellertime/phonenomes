@@ -1,0 +1,8 @@
+[package]
+name = "phonenomes"
+version = "0.1.0"
+authors = ["Chris Heller <cheller@akamai.com>"]
+
+[dependencies]
+itertools = "0.6.2"
+radix_trie = "0.1.2"
