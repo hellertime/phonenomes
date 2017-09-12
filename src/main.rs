@@ -22,7 +22,7 @@ const phone_chars: [&[u8]; 10] = [
  ];
 
 // Computes the arrays from `phone_chars` which correspond to the 7 inputs
-fn phone_to_chars<'a>(phone: Vec<u8>) -> Vec<&'a [u8]> {
+fn phone_to_chars<'a>(phone: &Vec<u8>) -> Vec<&'a [u8]> {
     let digits : Vec<u32> = phone.iter().map(|c| (*c as char).to_digit(10).unwrap_or(0)).collect();
     vec![
         phone_chars.get(digits[0] as usize).unwrap(),
@@ -35,7 +35,7 @@ fn phone_to_chars<'a>(phone: Vec<u8>) -> Vec<&'a [u8]> {
 }
 
 // Computes the cartesian product of the input vector
-fn phone_to_words(input: Vec<u8>) -> Vec<String> {
+fn phone_to_words(input: &Vec<u8>) -> Vec<String> {
     let mut output = Vec::new();
     let mut cs : Vec<Iter<u8>> = phone_to_chars(input).iter().map(|a| a.into_iter()).collect();
     // iproduct wants an Iterator
@@ -99,7 +99,7 @@ fn main() {
     for line in stdin.lock().lines() {
         let line = line.unwrap();
         assert_eq!(7, line.len());
-        let ws = phone_to_words(line.clone().into_bytes());
+        let ws = phone_to_words(&(line.clone().into_bytes()));
         for w in ws {
             if is_covered(aut.find_overlapping(&w), 7) {
                 println!("{}: {}", line, w);
