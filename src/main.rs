@@ -99,11 +99,10 @@ fn main() {
     for line in stdin.lock().lines() {
         let line = line.unwrap();
         assert_eq!(7, line.len());
-        println!("Words from {}", line);
-        let ws = phone_to_words(line.into_bytes());
-        for w in ws { //.iter().filter(|w| w.as_str() == "redtuba") {
+        let ws = phone_to_words(line.clone().into_bytes());
+        for w in ws {
             if is_covered(aut.find_overlapping(&w), 7) {
-                println!("{}", w);
+                println!("{}: {}", line, w);
             }
         }
     }
