@@ -5,10 +5,10 @@ use std::slice::Iter;
 #[macro_use] extern crate itertools;
 
 extern crate aho_corasick;
-use aho_corasick::{Automaton, AcAutomaton, MatchesOverlapping, Match};
+use aho_corasick::{Automaton, AcAutomaton, MatchesOverlapping};
 
 // The mapping from digit to potential chars
-const phone_chars: [&[u8]; 10] = [
+const PHONE_CHARS: [&[u8]; 10] = [
     b"----", // 0 - no mappable chars
     b"----", // 1 - no mappable chars
     b"abc", // 2 
@@ -25,13 +25,13 @@ const phone_chars: [&[u8]; 10] = [
 fn phone_to_chars<'a>(phone: &Vec<u8>) -> Vec<&'a [u8]> {
     let digits : Vec<u32> = phone.iter().map(|c| (*c as char).to_digit(10).unwrap_or(0)).collect();
     vec![
-        phone_chars.get(digits[0] as usize).unwrap(),
-        phone_chars.get(digits[1] as usize).unwrap(),
-        phone_chars.get(digits[2] as usize).unwrap(),
-        phone_chars.get(digits[3] as usize).unwrap(),
-        phone_chars.get(digits[4] as usize).unwrap(),
-        phone_chars.get(digits[5] as usize).unwrap(),
-        phone_chars.get(digits[6] as usize).unwrap()]
+        PHONE_CHARS.get(digits[0] as usize).unwrap(),
+        PHONE_CHARS.get(digits[1] as usize).unwrap(),
+        PHONE_CHARS.get(digits[2] as usize).unwrap(),
+        PHONE_CHARS.get(digits[3] as usize).unwrap(),
+        PHONE_CHARS.get(digits[4] as usize).unwrap(),
+        PHONE_CHARS.get(digits[5] as usize).unwrap(),
+        PHONE_CHARS.get(digits[6] as usize).unwrap()]
 }
 
 // Computes the cartesian product of the input vector
@@ -63,7 +63,7 @@ fn is_covered<'a>(ms: MatchesOverlapping<&'a str, AcAutomaton<&'a str>>, spannin
     let mut span = 0;
 
     for m in ms {
-        //println!(">low: {}; hi: {}; span: {}; match {:?}", low, hi, span, m);
+        println!(">low: {}; hi: {}; span: {}; match {:?}", low, hi, span, m);
         if m.start > hi {
             low = m.start;
             hi = m.end;
@@ -78,11 +78,11 @@ fn is_covered<'a>(ms: MatchesOverlapping<&'a str, AcAutomaton<&'a str>>, spannin
                 hi = m.end;
             }
         }
-        //println!("<low: {}; hi: {}; span: {}; match {:?}", low, hi, span, m);
+        println!("<low: {}; hi: {}; span: {}; match {:?}", low, hi, span, m);
     }
 
     span = span + (hi - low);
-    //println!("=low: {}; hi: {}; span: {}", low, hi, span);
+    println!("=low: {}; hi: {}; span: {}", low, hi, span);
 
     span == spanning
 }
